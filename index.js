@@ -44,7 +44,7 @@
 					let wh = whs.find(w => w.name == "fookat bridge");
 					if (wh) dc.wh = wh;
 					else {
-						dc.wh = await dc.createWebhook("fookat bridge", {reason: "Automatically created webhook to bridge to fookat.tk"});
+						dc.wh = await dc.createWebhook("fookat bridge", "Automatically created webhook to bridge to fookat.tk");
 					}
 				}
 			} catch(e) {
