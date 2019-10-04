@@ -19,8 +19,11 @@
 	const JPDLD_GUILD_ID = "357038384121905152";
 
 	// fookat rocket to jpdld discord
+	var receivedRcMsgIDs = [];
 	await driver.reactToMessages(async function(e, m, mo){
 		if (e) return console.error(e);
+		if (receivedRcMsgIDs.includes(m._id)) return; // apparently the server re-sends messages with the same id to add url information for embeds; so we need to collect the msg IDs to ignore those
+		else receivedRcMsgIDs.push(m._id);
 		if (m.u._id == driver.userId) return;
 		if (!m.mentions && !m.channels) return; // ignore user join/leave messages and whatever else; TODO any better way to differentiate them?
 		var roomName = mo && mo.roomName || await driver.getRoomId(m.rid);
@@ -55,14 +58,28 @@
 				username: m.u.username.substr(0,32),
 				avatarURL: `https://fookat.tk/avatar/${m.u.username}`,
 				split: true,
-				disableEveryone: true
+				disableEveryone: true,
+				embeds: m.attachments ? m.attachments.map(a => ({
+					title: a.title,
+					url: a.title_link,
+					description: a.description,
+					image_url: a.image_url
+				})) : undefined
 			});
 		} catch(e) {
 			console.error(`JPDLD webhook send failure:`, e);
 			await fallbackSend();
 		}
 		async function fallbackSend() {
-			await dc.send(`**${m.u.username}:** ${m.msg}`, {split: true}).catch(e => console.error(`Couldn't send fallback message to JPDLD channel ${dcname} (${e.message})`));
+			await dc.send(`**${m.u.username}:** ${m.msg}`, {
+				split: true,
+				embeds: m.attachments ? m.attachments.map(a => ({
+					title: a.title,
+					url: a.title_link,
+					description: a.description,
+					image_url: a.image_url
+				})) : undefined
+			}).catch(e => console.error(`Couldn't send fallback message to JPDLD channel ${dcname} (${e.message})`));
 		}
 	});
 
