@@ -61,9 +61,9 @@
 				disableEveryone: true,
 				embeds: m.attachments ? m.attachments.map(a => ({
 					title: a.title,
-					url: a.title_link,
+					url: a.title_link ? "https://fookat.tk" + a.title_link : undefined,
 					description: a.description,
-					image_url: a.image_url
+					image_url: a.image_url ? "https://fookat.tk" + a.image_url : undefined
 				})) : undefined
 			});
 		} catch(e) {
@@ -75,9 +75,9 @@
 				split: true,
 				embeds: m.attachments ? m.attachments.map(a => ({
 					title: a.title,
-					url: a.title_link,
+					url: a.title_link ? "https://fookat.tk" + a.title_link : undefined,
 					description: a.description,
-					image_url: a.image_url
+					image_url: a.image_url ? "https://fookat.tk" + a.image_url : undefined
 				})) : undefined
 			}).catch(e => console.error(`Couldn't send fallback message to JPDLD channel ${dcname} (${e.message})`));
 		}
