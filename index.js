@@ -55,7 +55,7 @@
 		}
 		try {
 			await dc.wh.send(m.msg,{
-				username: m.u.username.substr(0,32),
+				username: `${m.u.username} @ fookat.tk`.substr(0,32),
 				avatarURL: `https://fookat.tk/avatar/${m.u.username}?${process.pid}`,
 				split: true,
 				disableEveryone: true,
