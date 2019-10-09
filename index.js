@@ -82,6 +82,7 @@
 			}).catch(e => console.error(`Couldn't send fallback message to JPDLD channel ${dcname} (${e.message})`));
 		}
 	});
+	// TODO synchronize message deletes
 
 	// jpdld discord to fookat rocket
 	//var rcroomBlacklist = [];
@@ -104,7 +105,20 @@
 				audio_url: [".ogg", ".mp3", ".wav", ".flac"].some(ext=>attachment.filename.endsWith(ext)) ? attachment.url : undefined,
 				video_url: [".mp4", ".webm", ".mov", ".avi"].some(ext=>attachment.filename.endsWith(ext)) ? attachment.url : undefined
 
-			}));
+			}).concat(message.embeds.map(embed => embed.type == "rich" ? {
+				author_name: embed.author && embed.author.name,
+				author_link: embed.author && embed.author.url,
+				author_icon: embed.author && embed.author.iconURL,
+				title: embed.title,
+				title_link: embed.url,
+				title_link_download: false,
+				color: embed.hexColor,
+				text: embed.description,
+				image_url: embed.image && embed.image.url,
+				thumb_url: embed.thumbnail && embed.thumbnail.url,
+				fields: embed.fields && embed.fields.map(f => ({title: f.name, value: f.value, short: f.inline})),
+				ts: embed.timestamp
+			} : undefined).filter(x=>x)));
 			message.rcmsg = await driver.sendMessage(rcmsg);
 		}
 		try {
