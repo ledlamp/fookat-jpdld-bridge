@@ -104,7 +104,7 @@
 				image_url: attachment.width ? attachment.url : undefined,
 				audio_url: [".ogg", ".mp3", ".wav", ".flac"].some(ext=>attachment.filename.endsWith(ext)) ? attachment.url : undefined,
 				video_url: [".mp4", ".webm", ".mov", ".avi"].some(ext=>attachment.filename.endsWith(ext)) ? attachment.url : undefined
-			}).concat(message.embeds.map(embed => embed.type == "rich" ? {
+			})).concat(message.embeds.map(embed => embed.type == "rich" ? {
 				author_name: embed.author && embed.author.name,
 				author_link: embed.author && embed.author.url,
 				author_icon: embed.author && embed.author.iconURL,
@@ -117,7 +117,7 @@
 				thumb_url: embed.thumbnail && embed.thumbnail.url,
 				fields: embed.fields && embed.fields.map(f => ({title: f.name, value: f.value, short: f.inline})),
 				ts: embed.timestamp
-			} : undefined).filter(x=>x)));
+			} : undefined)).filter(x=>x);
 			message.rcmsg = await driver.sendMessage(rcmsg);
 		}
 		try {
