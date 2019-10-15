@@ -67,7 +67,7 @@
 				})) : undefined
 			});
 		} catch(e) {
-			console.error(`JPDLD webhook send failure:`, e);
+			console.error(`JPDLD webhook send failure:`, e.message);
 			await fallbackSend();
 		}
 		async function fallbackSend() {
